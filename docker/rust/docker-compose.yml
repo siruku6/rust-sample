@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  rust:
+    build:
+      context: ../../
+      dockerfile: ./docker/rust/Dockerfile
+      args:
+        WORKING_DIRECTORY: ${WORKING_DIRECTORY}
+    tty: true
+    working_dir: "/${WORKING_DIRECTORY}"
+    volumes:
+      - ../../:/${WORKING_DIRECTORY}
+      - rust-target:/workspace/target
+    # Fix slow shutdown of web container
+    init: true
+
+volumes:
+  rust-target:
