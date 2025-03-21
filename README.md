@@ -30,3 +30,7 @@ And if you see "Dev Container: Rust Template" in the bottom left corner, you're 
     - [crates](https://marketplace.visualstudio.com/items?itemName=serayuzgur.crates)
     - [EditorConfig for VS Code](https://marketplace.visualstudio.com/items?itemName=EditorConfig.EditorConfig)
 
+
+## Init dev environment
+
+- [README.md](./docker/rust/README.md)
