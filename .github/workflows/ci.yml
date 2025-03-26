@@ -33,11 +33,13 @@ jobs:
         uses: actions-rs/cargo@v1
         with:
           command: build
+          args: --manifest-path ./Cargo.toml
 
       - name: Run clippy
         uses: actions-rs/clippy-check@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+          args: --manifest-path ./Cargo.toml
 
       - name: Run rustfmt
         uses: actions-rs/cargo@v1
