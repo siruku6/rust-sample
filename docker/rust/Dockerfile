@@ -6,6 +6,6 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 RUN rustup component add rls rust-analysis rust-src rustfmt clippy && \
-    cargo install cargo-edit cargo-watch
+    cargo install cargo-edit cargo-watch cargo-cache
 
 # COPY ./docker/rust/Cargo.toml ./Cargo.toml
