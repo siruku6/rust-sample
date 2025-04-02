@@ -1,6 +1,7 @@
 # rust-template-for-vscode-remotecontainers
 
-[![CI](https://github.com/schrosis/rust-template-for-vscode-remotecontainers/actions/workflows/ci.yml/badge.svg)](https://github.com/schrosis/rust-template-for-vscode-remotecontainers/actions/workflows/ci.yml)
+[![CI](https://github.com/siruku6/rust-sample/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/siruku6/rust-sample/actions/workflows/ci.yml)
+[![Security audit](https://github.com/siruku6/rust-sample/actions/workflows/security-audit.yml/badge.svg?branch=main)](https://github.com/siruku6/rust-sample/actions/workflows/security-audit.yml)
 
 Rust template development environment using VSCode's RemoteContainers
 
