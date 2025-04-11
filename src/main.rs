@@ -2,11 +2,14 @@ mod norm_module;
 use norm_module::norm::sampling_norm;
 
 mod modules;
-// use modules::compare_ndarray_and_vec::compare;
-use modules::rust_numpy::ndarray_sample;
+use modules::rust_by_example;
+use modules::trait_impl_trial::{iterate_turn, Agent};
 
 // mod optimization;
 // use optimization::initializer;
+
+// mod genetic;
+// use genetic::main_algorithm;
 
 fn main() {
     // let mut rng = rand::rng(); // デフォルトの乱数生成器を初期化します
@@ -23,12 +26,19 @@ fn main() {
     let vec_rand: Vec<f64> = sampling_norm(10.0, 5.0, 5);
     println!("vec_rand: {vec_rand:?}");
 
-    let a = ndarray_sample();
-    println!("a:\n{a:?}");
-
     // initializer::init();
 
     // compare();
 
     modules::sandbox::test();
+
+    let mut agents = vec![
+        Agent::<String>::new("Hero".to_string(), 10, 5, 20),
+        Agent::<String>::new("Monster".to_string(), 6, 8, 45),
+    ];
+    iterate_turn(agents.as_mut());
+
+    rust_by_example::example();
+
+    // genetic::main_algorithm::run();
 }
