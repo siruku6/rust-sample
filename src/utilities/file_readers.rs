@@ -78,6 +78,48 @@ fn fopen(path: &OsString) -> Result<File, Box<dyn Error>> {
     Ok(file)
 }
 
+/// コマンドライン引数を解析するための構造体
+struct ArgParser {
+    file_path: OsString,
+    delimiter: u8,
+    delimiter_str: String,
+}
+impl ArgParser {
+    /// 新しいArgParserを作成します。
+    /// 引数はコマンドライン引数から取得します。
+    fn new() -> Self {
+        let file_path = get_first_arg().unwrap();
+        let delimiter_str = get_second_arg()
+            .unwrap_or_else(|_| OsString::from("comma"))
+            .into_string()
+            .unwrap_or_else(|_| "comma".to_string());
+
+        let delimiter = match delimiter_str.to_lowercase().as_str() {
+            "tab" => b'\t',
+            "comma" => b',',
+            "semicolon" => b';',
+            "pipe" => b'|',
+            "space" => b' ',
+            _ => b',',
+        };
+
+        let delimiter_str = match delimiter {
+            b'\t' => "tab".to_string(),
+            b',' => "comma".to_string(),
+            b';' => "semicolon".to_string(),
+            b'|' => "pipe".to_string(),
+            b' ' => "space".to_string(),
+            _ => "comma".to_string(),
+        };
+
+        Self {
+            file_path,
+            delimiter,
+            delimiter_str,
+        }
+    }
+}
+
 /// コマンドライン引数で指定されたファイルを読み込み、
 /// 各行を出力します。ファイルパスを文字列として返します。
 ///
@@ -87,64 +129,29 @@ fn fopen(path: &OsString) -> Result<File, Box<dyn Error>> {
 /// $ cargo run data/input/la40_tailored.txt comma
 /// $ cargo run data/input/la40_tailored.txt semicolon
 ///
-pub fn read_csv() -> String {
-    let file_path = match get_first_arg() {
-        Ok(file_path) => file_path,
-        Err(err) => {
-            eprintln!("Error: {}", err);
-            process::exit(1);
-        }
-    };
+pub fn read_csv() -> (Option<StringRecord>, Vec<StringRecord>) {
+    // コマンドライン引数を解析
+    let arg_parser = ArgParser::new();
+    let file_path = arg_parser.file_path;
 
-    // 2番目の引数から区切り文字を取得
-    let delimiter_str = match get_second_arg() {
-        Ok(delimiter) => delimiter
-            .into_string()
-            .unwrap_or_else(|_| "comma".to_string()),
-        Err(_) => {
-            println!("No delimiter specified, using comma as default.");
-            "comma".to_string()
-        }
-    };
-
-    // 区切り文字の文字列を対応するバイトに変換
-    let delimiter = match delimiter_str.to_lowercase().as_str() {
-        "tab" => b'\t',
-        "comma" => b',',
-        "semicolon" => b';',
-        "pipe" => b'|',
-        "space" => b' ',
-        _ => {
-            println!(
-                "Unknown delimiter: {}, using comma as default.",
-                delimiter_str
-            );
-            b','
-        }
-    };
-
+    // ファイルを開く
     let file: File = fopen(&file_path).unwrap();
-    let (header, row_list) = match parse_delimited_file(file, delimiter) {
-        Ok(result) => {
-            let (header, row_list) = result;
-            println!(
-                "Successfully parsed file with '{}' delimiter: {:?}",
-                delimiter_str, file_path
-            );
-            (header, row_list)
-        }
-        Err(err) => {
-            eprintln!("Error: {}", err);
-            process::exit(1);
-        }
-    };
+    let (header, row_list) =
+        match parse_delimited_file(file, arg_parser.delimiter) {
+            Ok(result) => {
+                let (header, row_list) = result;
+                println!(
+                    "Successfully {:?} is parsed with {:?}",
+                    file_path, arg_parser.delimiter_str
+                );
+                (header, row_list)
+            }
+            Err(err) => {
+                eprintln!("Error: {}", err);
+                process::exit(1);
+            }
+        };
 
-    // ヘッダーを表示
-    println!("Header: {:?}", header);
-    // 各行を表示
-    for row in row_list {
-        println!("Row: {:?}", row);
-    }
-
-    file_path.into_string().unwrap()
+    // file_path.into_string().unwrap()
+    (header, row_list)
 }

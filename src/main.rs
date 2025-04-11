@@ -45,6 +45,9 @@ fn main() {
 
     // genetic::main_algorithm::run();
 
-    let filepath: String = utilities::file_readers::read_csv();
-    println!("File path: {:?}", filepath);
+    let (header, row_list) = file_readers::read_csv();
+    println!("Header: {:?}", header);
+    for row in row_list.iter() {
+        println!("Row: {:?}", row);
+    }
 }
