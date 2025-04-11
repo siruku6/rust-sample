@@ -6,3 +6,4 @@
 // pub mod genetic;
 pub mod modules;
 pub mod norm_module;
+pub mod utilities;

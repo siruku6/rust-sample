@@ -11,6 +11,9 @@ use modules::trait_impl_trial::{iterate_turn, Agent};
 // mod genetic;
 // use genetic::main_algorithm;
 
+mod utilities;
+use utilities::file_readers;
+
 fn main() {
     // let mut rng = rand::rng(); // デフォルトの乱数生成器を初期化します
     // let i: i32 = rng.random(); // 整数値の乱数を生成する
@@ -41,4 +44,10 @@ fn main() {
     rust_by_example::example();
 
     // genetic::main_algorithm::run();
+
+    let (header, row_list) = file_readers::read_csv();
+    println!("Header: {:?}", header);
+    for row in row_list.iter() {
+        println!("Row: {:?}", row);
+    }
 }
