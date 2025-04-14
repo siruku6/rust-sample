@@ -14,13 +14,11 @@ $ docker compose run rust bash
 ```
 
 
-## 新規プロジェクトを作成する
+## 処理の動作確認
+
+- 以下のコマンドを Docker コンテナ内で実行する
 
 ```
-# Inside docker container
-cargo new hello
-cd hello/
-
 # 実行コードを build したい場合
 cargo build
 

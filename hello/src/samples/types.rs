@@ -1,3 +1,5 @@
+use std::io;
+
 use std::collections::HashMap;
 
 fn type_of<T>(_: &T) -> &'static str {
@@ -102,6 +104,13 @@ pub fn type_sample() {
     println!("text_length: {text_length:?}");
     println!("still can print text: {text:?}");
 
+    // https://doc.rust-lang.org/std/borrow/trait.ToOwned.html#tymethod.to_owned
+    // to_owned() は Option<&T> を Option<T::Owned> に変換する
+    // Option<&T> to Option<T::Owned>
+
+    // https://zenn.dev/asamin/articles/6a9c29a89a8064
+    // Rustのunwrapと?の違い
+
     // https://doc.rust-lang.org/std/option/enum.Option.html#method.as_deref
     // Option<T> (or &Option<T>) to Option<&T::Target>
     println!("Some('hey'): {:?}", type_of(&Some("hey"))); // "core::option::Option<&str>"
@@ -187,6 +196,21 @@ pub fn type_sample() {
     let code = error_handling(result);
     println!("Result5-2: {:?}", code);
 
+    // ? を使って結果を取り出す
+    fn extract_from_result<T>(
+        opt: Result<T, io::Error>,
+    ) -> Result<T, io::Error> {
+        let content: T = opt?;
+        return Ok(content);
+    }
+
+    fn main() {
+        let res: Result<String, io::Error> = Ok("hey".to_owned());
+
+        let content: Result<String, io::Error> = extract_from_result(res);
+        println!("{:?}", content.unwrap() + "hoge");
+    }
+
     /* -------------------------
     Vec の使い方
     ------------------------- */
@@ -230,6 +254,14 @@ pub fn type_sample() {
     let byte_array = [b'h', b'e', b'l', b'l', b'o'];
     // Box::new で Box<[u8]> 型に変換すれば要素数未定でもOK
     print(Box::new(byte_array));
+
+    // Box の中身の取り出し、変更
+    let x = Box::new(5);
+    let mut y = Box::new(3);
+    // * を使うと、 Box の中身を取り出したり、中身を上書きしたりできる.
+    *y = 4;
+    assert_eq!(*x, 5);
+    println!("Success!");
 
     /* -------------------------
     Range
