@@ -7,19 +7,7 @@ pub fn ndarray_sample() -> Array2<f32> {
 
     let b: Array2<f32> = arr2(&[[1., 2., 3.], [3., 4., 5.], [4., 5., 6.]]);
 
-    let mut res_adamar: Array2<f32> = Array2::zeros((3, 3));
-    let res_adamar: Array2<f32> = &a * &b;
-
-    // match result {
-    //     Ok(_) => println!("正常終了"),
-    //     Err(err) => {
-    //         if let Some(msg) = err.downcast_ref::<&str>() {
-    //             println!("キャッチしたパニックメッセージ: {}", msg);
-    //         } else {
-    //             println!("キャッチしたパニック: {:?}", err);
-    //         }
-    //     }
-    // }
+    let res_adamar = &a * &b;
 
     // dot product
     let res_dot: Array2<f32> = a.dot(&b);
