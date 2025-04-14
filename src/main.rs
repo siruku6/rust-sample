@@ -54,8 +54,5 @@ fn main() {
     let (header, row_list) = file_readers::read_csv();
     let job_master: JobMaster = preprocess::runner::run(header, row_list);
 
-    println!("exec_times: {:?}", job_master.exec_times);
-    println!("actor_sequences: {:?}", job_master.actor_sequences);
-
     la40::run(job_master);
 }
