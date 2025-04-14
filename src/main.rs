@@ -5,7 +5,10 @@ mod modules;
 use modules::rust_by_example;
 use modules::trait_impl_trial::{iterate_turn, Agent};
 
-// mod optimization;
+mod optimization;
+use optimization::preprocess;
+use optimization::preprocess::runner::JobMaster;
+use optimization::runner::la40;
 // use optimization::initializer;
 
 // mod genetic;
@@ -45,9 +48,14 @@ fn main() {
 
     // genetic::main_algorithm::run();
 
+    /* --------------------------------
+    最適化処理のサンプル実装
+    -------------------------------- */
     let (header, row_list) = file_readers::read_csv();
-    println!("Header: {:?}", header);
-    for row in row_list.iter() {
-        println!("Row: {:?}", row);
-    }
+    let job_master: JobMaster = preprocess::runner::run(header, row_list);
+
+    println!("exec_times: {:?}", job_master.exec_times);
+    println!("actor_sequences: {:?}", job_master.actor_sequences);
+
+    la40::run(job_master);
 }
