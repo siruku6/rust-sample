@@ -5,8 +5,8 @@ use csv::StringRecord;
 pub struct JobMaster {
     pub job_size: usize,
     pub machine_series_size: usize,
-    pub exec_times: Vec<Vec<i16>>,
-    pub actor_sequences: Vec<Vec<i16>>,
+    pub exec_times: Vec<Vec<u16>>,
+    pub actor_sequences: Vec<Vec<u16>>,
 }
 
 /// CSVファイルのヘッダーから job 数と machine_series 数を取得
@@ -43,12 +43,12 @@ pub fn run(header: Option<StringRecord>, rows: Vec<StringRecord>) -> JobMaster {
         extract_size(header, "machine_series_size".to_string());
 
     // rows を Vec<Vec<i16>> に変換
-    let mut exec_times: Vec<Vec<i16>> = Vec::new();
-    let mut actor_id_sequences: Vec<Vec<i16>> = Vec::new();
+    let mut exec_times: Vec<Vec<u16>> = Vec::new();
+    let mut actor_id_sequences: Vec<Vec<u16>> = Vec::new();
     for (i, row) in rows.iter().enumerate() {
-        let mut row_data: Vec<i16> = Vec::new();
+        let mut row_data: Vec<u16> = Vec::new();
         for field in row.iter() {
-            if let Ok(value) = field.parse::<i16>() {
+            if let Ok(value) = field.parse::<u16>() {
                 row_data.push(value);
             }
         }
@@ -58,6 +58,10 @@ pub fn run(header: Option<StringRecord>, rows: Vec<StringRecord>) -> JobMaster {
             exec_times.push(row_data);
         // job 内各 operation のを実行可能なマシンの整理
         } else {
+            // NOTE: actor_id は +1 されている (0が登場しない) ので、-1 しておく
+            row_data.iter_mut().for_each(|val| {
+                *val -= 1;
+            });
             actor_id_sequences.push(row_data);
         }
     }

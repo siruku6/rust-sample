@@ -1,6 +1,7 @@
 use rand;
 use rand::seq::SliceRandom;
 
+use crate::optimization::decoder::score::calc_makespan;
 use crate::optimization::preprocess::runner::JobMaster;
 
 /// 解を1つランダムに初期化
@@ -22,4 +23,7 @@ pub fn run(job_master: JobMaster) {
     let num_job: u16 = job_master.job_size as u16;
     let num_actor: u16 = job_master.machine_series_size as u16;
     let chromosome: Vec<u16> = initialize_chromosome(num_job, num_actor);
+
+    let make_span: u16 = calc_makespan(&chromosome, &job_master);
+    println!("[INFO] makespan: {:?}", make_span);
 }
