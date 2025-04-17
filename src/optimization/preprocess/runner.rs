@@ -4,8 +4,8 @@ use csv::StringRecord;
 
 #[derive(Debug, Clone)]
 pub struct JobMaster {
-    pub job_size: usize,
-    pub machine_series_size: usize,
+    pub job_size: u16,
+    pub machine_series_size: u16,
     pub exec_times: Vec<Vec<u16>>,
     pub actor_sequences: Vec<Vec<u16>>,
 }
@@ -39,9 +39,10 @@ pub fn run(header: Option<StringRecord>, rows: Vec<StringRecord>) -> JobMaster {
     ------------------------------- */
 
     // headerから job 数を取得
-    let job_size: usize = extract_size(header.clone(), "job_size".to_string());
-    let machine_series_size: usize =
-        extract_size(header, "machine_series_size".to_string());
+    let job_size: u16 =
+        extract_size(header.clone(), "job_size".to_string()) as u16;
+    let machine_series_size: u16 =
+        extract_size(header, "machine_series_size".to_string()) as u16;
 
     // rows を Vec<Vec<i16>> に変換
     let mut exec_times: Vec<Vec<u16>> = Vec::new();
@@ -55,7 +56,7 @@ pub fn run(header: Option<StringRecord>, rows: Vec<StringRecord>) -> JobMaster {
         }
 
         // job 内各 operation の所要時間の整理
-        if i < job_size {
+        if (i as u16) < job_size {
             exec_times.push(row_data);
         // job 内各 operation のを実行可能なマシンの整理
         } else {

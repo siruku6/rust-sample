@@ -47,7 +47,7 @@ fn cool(temperature: f64) -> f64 {
 
 pub fn run(
     chromosome: &mut types::Chromosome,
-    calculator: ScoreCalculator,
+    mut calculator: ScoreCalculator,
 ) -> (types::Chromosome, u16, f64, u32) {
     let start: Instant = Instant::now();
     let mut temperature: f64 = 1.0;
