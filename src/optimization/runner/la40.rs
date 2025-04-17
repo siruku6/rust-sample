@@ -2,6 +2,7 @@ use rand::seq::SliceRandom;
 use rand::SeedableRng;
 use rand_chacha::ChaCha8Rng;
 
+use crate::optimization::algorithm::simulated_annealing;
 use crate::optimization::decoder::score::ScoreCalculator;
 use crate::optimization::preprocess::runner::JobMaster;
 use crate::optimization::types;
@@ -31,10 +32,14 @@ fn initialize_chromosome(num_job: u16, num_actor: u16) -> types::Chromosome {
 pub fn run(job_master: JobMaster) {
     let num_job: u16 = job_master.job_size as u16;
     let num_actor: u16 = job_master.machine_series_size as u16;
-    let chromosome: types::Chromosome =
+    let mut chromosome: types::Chromosome =
         initialize_chromosome(num_job, num_actor);
 
-    let calculator: ScoreCalculator = ScoreCalculator { job_master };
-    let make_span: u16 = calculator.calc_makespan(&chromosome);
-    println!("[INFO] makespan: {:?}", make_span);
+    let calculator: ScoreCalculator = ScoreCalculator::new(job_master);
+    let (best_solution, best_makespan, best_score, iterated_num) =
+        simulated_annealing::run(&mut chromosome, calculator);
+    println!(
+        "[INFO] best_score: {:?}, best_makespan: {:?}, iterated_num: {:?}",
+        best_score, best_makespan, iterated_num
+    );
 }

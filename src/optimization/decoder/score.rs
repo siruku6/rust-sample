@@ -1,4 +1,5 @@
 use crate::optimization::preprocess::runner::JobMaster;
+use crate::optimization::types;
 use std::collections::HashMap;
 
 pub struct ScoreCalculator {
@@ -10,11 +11,11 @@ impl ScoreCalculator {
         ScoreCalculator { job_master }
     }
 
-    pub fn calc_makespan(
-        &self,
-        chromosome: &Vec<u16>,
-        // job_master: &JobMaster,
-    ) -> u16 {
+    pub fn makespan_to_score(&self, makespan: u16) -> f64 {
+        1.0 / makespan as f64
+    }
+
+    pub fn calc_makespan(&self, chromosome: types::Chromosome) -> u16 {
         /* ----------------------------------------------------------------
         // 下準備 - カウンターの初期化
         ---------------------------------------------------------------- */

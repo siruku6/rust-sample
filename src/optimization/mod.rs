@@ -1,3 +1,4 @@
+pub mod algorithm;
 pub mod decoder;
 // pub mod initializer;
 pub mod preprocess;
