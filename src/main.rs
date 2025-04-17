@@ -11,9 +11,6 @@ use optimization::preprocess::runner::JobMaster;
 use optimization::runner::la40;
 // use optimization::initializer;
 
-// mod genetic;
-// use genetic::main_algorithm;
-
 mod utilities;
 use utilities::file_readers;
 
@@ -34,8 +31,6 @@ fn main() {
 
     // initializer::init();
 
-    // compare();
-
     modules::sandbox::test();
 
     let mut agents = vec![
@@ -45,8 +40,6 @@ fn main() {
     iterate_turn(agents.as_mut());
 
     rust_by_example::example();
-
-    // genetic::main_algorithm::run();
 
     /* --------------------------------
     最適化処理のサンプル実装
