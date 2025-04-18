@@ -6,8 +6,8 @@ use crate::optimization::types;
 pub struct ScoreCalculator {
     pub job_master: JobMaster,
     done_operations_count: HashMap<u16, u8>, // 各 job の operation 進捗
-    elapsed_job_time_map: HashMap<u16, u16>,
-    elapsed_actor_time_map: HashMap<u16, u16>,
+    elapsed_job_time_map: HashMap<u16, u16>, // 各 job 内実行済み operation の経過時間
+    elapsed_actor_time_map: HashMap<u16, u16>, // 各 actor の経過時間
 }
 
 impl ScoreCalculator {
@@ -24,26 +24,19 @@ impl ScoreCalculator {
         1.0 / makespan as f64
     }
 
+    /// カウンターを初期化する
     fn init_counters(&mut self) {
-        /* ----------------------------------------------------------------
-        // 下準備 - カウンターの初期化
-        ---------------------------------------------------------------- */
-        let mut done_operations_count: HashMap<u16, u8> = HashMap::new();
-        for job in 0..self.job_master.job_size {
-            done_operations_count.insert(job, 0);
-        }
-        self.done_operations_count = done_operations_count;
+        self.done_operations_count =
+            Self::initialize_map(self.job_master.job_size, 0);
+        self.elapsed_job_time_map =
+            Self::initialize_map(self.job_master.job_size, 0);
+        self.elapsed_actor_time_map =
+            Self::initialize_map(self.job_master.machine_series_size, 0);
+    }
 
-        // 各 job 内実行済み operation の経過時間
-        self.elapsed_job_time_map = HashMap::new();
-        for job in 0..self.job_master.job_size {
-            self.elapsed_job_time_map.insert(job, 0);
-        }
-        // 各 actor の経過時間
-        self.elapsed_actor_time_map = HashMap::new();
-        for actor_id in 0..self.job_master.machine_series_size {
-            self.elapsed_actor_time_map.insert(actor_id, 0);
-        }
+    /// 汎用的なマップ初期化関数
+    fn initialize_map<T: Copy>(size: u16, default_value: T) -> HashMap<u16, T> {
+        (0..size).map(|key| (key, default_value)).collect()
     }
 
     fn update_elapsed_time(
