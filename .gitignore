@@ -13,3 +13,4 @@ Cargo.lock
 data/*
 .env
 docker-compose.override.yml
+notebooks/
