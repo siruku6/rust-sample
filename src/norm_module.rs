@@ -17,6 +17,6 @@ pub mod norm {
             let sample = dist.sample(&mut rng);
             vec_rand.push(sample);
         }
-        return vec_rand;
+        vec_rand
     }
 }

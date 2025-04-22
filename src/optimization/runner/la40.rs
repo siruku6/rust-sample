@@ -39,7 +39,7 @@ pub fn run(job_master: JobMaster) {
     let (best_solution, best_makespan, best_score, iterated_num) =
         simulated_annealing::run(&mut chromosome, calculator);
     println!(
-        "[INFO] best_score: {:?}, best_makespan: {:?}, iterated_num: {:?}",
-        best_score, best_makespan, iterated_num
+        "[INFO] best_score: {:?}, best_makespan: {:?}, iterated_num: {:?}, best_solution: {:?}",
+        best_score, best_makespan, iterated_num, best_solution
     );
 }

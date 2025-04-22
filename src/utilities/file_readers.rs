@@ -55,15 +55,15 @@ fn parse_delimited_file(
     Ok((header, row_list))
 }
 
-// 既存のcsv_parse関数をこの新しい関数のラッパーにする
-fn csv_parse(file: File) -> Result<Vec<StringRecord>, Box<dyn Error>> {
-    parse_delimited_file(file, b',').map(|(_, rows)| rows) // カンマ区切り
-}
+// // 既存のcsv_parse関数をこの新しい関数のラッパーにする
+// fn csv_parse(file: File) -> Result<Vec<StringRecord>, Box<dyn Error>> {
+//     parse_delimited_file(file, b',').map(|(_, rows)| rows) // カンマ区切り
+// }
 
-// タブ区切りファイル用の新しい関数
-fn tsv_parse(file: File) -> Result<Vec<StringRecord>, Box<dyn Error>> {
-    parse_delimited_file(file, b'\t').map(|(_, rows)| rows) // タブ区切り
-}
+// // タブ区切りファイル用の新しい関数
+// fn tsv_parse(file: File) -> Result<Vec<StringRecord>, Box<dyn Error>> {
+//     parse_delimited_file(file, b'\t').map(|(_, rows)| rows) // タブ区切り
+// }
 
 /// 指定されたパスのファイルを開きます。
 /// ファイルが開けない場合はエラーを返します。

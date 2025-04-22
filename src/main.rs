@@ -1,9 +1,8 @@
 mod norm_module;
 use norm_module::norm::sampling_norm;
 
-mod modules;
-use modules::rust_by_example;
-use modules::trait_impl_trial::{iterate_turn, Agent};
+// mod modules;
+// use modules::trait_impl_trial::{iterate_turn, Agent};
 
 mod optimization;
 use optimization::preprocess;
@@ -31,15 +30,11 @@ fn main() {
 
     // initializer::init();
 
-    modules::sandbox::test();
-
-    let mut agents = vec![
-        Agent::<String>::new("Hero".to_string(), 10, 5, 20),
-        Agent::<String>::new("Monster".to_string(), 6, 8, 45),
-    ];
-    iterate_turn(agents.as_mut());
-
-    rust_by_example::example();
+    // let mut agents = vec![
+    //     Agent::<String>::new("Hero".to_string(), 10, 5, 20),
+    //     Agent::<String>::new("Monster".to_string(), 6, 8, 45),
+    // ];
+    // iterate_turn(agents.as_mut());
 
     /* --------------------------------
     最適化処理のサンプル実装
