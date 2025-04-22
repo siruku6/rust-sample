@@ -39,7 +39,9 @@ fn main() {
     /* --------------------------------
     最適化処理のサンプル実装
     -------------------------------- */
-    let (header, row_list) = file_readers::read_csv();
+    let (file_path, delimiter, delimiter_str) = file_readers::parse_args();
+    let (header, row_list) =
+        file_readers::read_csv(file_path, delimiter, delimiter_str);
     let job_master: JobMaster = preprocess::runner::run(header, row_list);
 
     la40::run(job_master);
