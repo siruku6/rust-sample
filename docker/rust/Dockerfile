@@ -1,4 +1,4 @@
-FROM rust:1.85.0-slim-bullseye
+FROM rust:1.86.0-slim-bookworm
 
 RUN apt-get update && \
     apt-get -y install git cmake vim procps locales \
@@ -6,10 +6,12 @@ RUN apt-get update && \
     # curl net-tools \
     # For ndarray-linalg of Rust : gcc make ??
     pkg-config libssl-dev gfortran \
-    # Solution for "error: failed to run custom build command for `freetype-sys v0.20.1"
+    # plotters - Solution for "error: failed to run custom build command for `freetype-sys v0.20.1"
     g++ \
-    # Solution for "error: failed to run custom build command for `yeslogic-fontconfig-sys v6.0.0`"
-    pkg-config libfreetype6-dev libfontconfig1-dev && \
+    # plotters - Solution for "error: failed to run custom build command for `yeslogic-fontconfig-sys v6.0.0`"
+    pkg-config libfreetype6-dev libfontconfig1-dev \
+    # enable jupyter notebook for rust
+    jupyter-notebook && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
@@ -21,4 +23,6 @@ RUN echo "ja_JP UTF-8" > /etc/locale.gen && \
 ENV LANG=ja_JP.UTF-8
 
 RUN rustup component add rls rust-analysis rust-src rustfmt clippy && \
-    cargo install cargo-edit cargo-watch cargo-cache
+    cargo install cargo-edit cargo-watch cargo-cache evcxr_jupyter && \
+    # evcxr_jupyter のインストール
+    evcxr_jupyter --install
