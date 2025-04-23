@@ -13,7 +13,7 @@ static TIME_LIMIT: f32 = 600.0; // seconds
 /// next: 次のスコア
 /// temperature: 温度パラメータ
 ///     低いほど、次のスコアを選択しやすくなる
-pub fn is_replaceable<T>(current: T, next: T, temperature: f64) -> bool
+fn is_replaceable<T>(current: T, next: T, temperature: f64) -> bool
 where
     T: PartialOrd + Sub<Output = T> + Into<f64> + Copy,
 {
@@ -29,16 +29,16 @@ where
 }
 
 /// 染色体（解）の中からランダムに2つの遺伝子を選択して、その2つの位置を交換
-fn swap_2_genes(chromosome: &mut types::Chromosome) -> types::Chromosome {
+fn swap_2_genes(chromosome: &types::Chromosome) -> types::Chromosome {
     let num_genes: usize = chromosome.len();
 
     // TODO: 乱数生成を統一 seed に従わせる
     let mut rng = rand::rng();
     let first_idx: usize = rng.random_range(0..num_genes) as usize;
     let second_idx: usize = rng.random_range(0..num_genes) as usize;
-    chromosome.swap(first_idx, second_idx);
-
-    chromosome.to_owned()
+    let mut new_chromo: types::Chromosome = chromosome.clone();
+    new_chromo.swap(first_idx, second_idx);
+    new_chromo.to_owned()
 }
 
 fn cool(temperature: f64) -> f64 {
@@ -64,8 +64,7 @@ pub fn run(
     let mut iterated_num: u32 = 0;
     for _step in 0..STEPS {
         iterated_num += 1;
-        let tmp_chromosome: types::Chromosome =
-            swap_2_genes(&mut current_solution);
+        let tmp_chromosome: types::Chromosome = swap_2_genes(&current_solution);
         let tmp_makespan: u16 =
             calculator.calc_makespan(tmp_chromosome.clone());
         let tmp_score: f64 = calculator.makespan_to_score(tmp_makespan);
