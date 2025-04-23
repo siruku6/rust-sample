@@ -30,8 +30,8 @@ fn parse_delimited_file(
     file: File,
     delimiter: u8,
 ) -> Result<(Option<StringRecord>, Vec<StringRecord>), Box<dyn Error>> {
-    let mut header = None;
-    let mut row_list = Vec::new();
+    let mut header: Option<StringRecord> = None;
+    let mut row_list: Vec<StringRecord> = Vec::new();
 
     let mut rdr = csv::ReaderBuilder::new()
         .flexible(true)
@@ -120,6 +120,16 @@ impl ArgParser {
     }
 }
 
+pub fn parse_args() -> (OsString, u8, String) {
+    // コマンドライン引数を解析
+    let arg_parser = ArgParser::new();
+    let file_path = arg_parser.file_path;
+    let delimiter: u8 = arg_parser.delimiter;
+    let delimiter_str: String = arg_parser.delimiter_str;
+
+    (file_path, delimiter, delimiter_str)
+}
+
 /// コマンドライン引数で指定されたファイルを読み込み、
 /// 各行を出力します。ファイルパスを文字列として返します。
 ///
@@ -129,28 +139,28 @@ impl ArgParser {
 /// $ cargo run data/input/la40_tailored.txt comma
 /// $ cargo run data/input/la40_tailored.txt semicolon
 ///
-pub fn read_csv() -> (Option<StringRecord>, Vec<StringRecord>) {
-    // コマンドライン引数を解析
-    let arg_parser = ArgParser::new();
-    let file_path = arg_parser.file_path;
-
+pub fn read_csv(
+    file_path: OsString,
+    delimiter: u8,
+    delimiter_str: String,
+) -> (Option<StringRecord>, Vec<StringRecord>) {
     // ファイルを開く
     let file: File = fopen(&file_path).unwrap();
-    let (header, row_list) =
-        match parse_delimited_file(file, arg_parser.delimiter) {
-            Ok(result) => {
-                let (header, row_list) = result;
-                println!(
-                    "Successfully {:?} is parsed with {:?}",
-                    file_path, arg_parser.delimiter_str
-                );
-                (header, row_list)
-            }
-            Err(err) => {
-                eprintln!("Error: {}", err);
-                process::exit(1);
-            }
-        };
+    let (header, row_list) = match parse_delimited_file(file, delimiter) {
+        Ok(result) => {
+            let (header, row_list): (Option<StringRecord>, Vec<StringRecord>) =
+                result;
+            println!(
+                "Successfully {:?} is parsed with {:?}",
+                file_path, delimiter_str
+            );
+            (header, row_list)
+        }
+        Err(err) => {
+            eprintln!("Error: {}", err);
+            process::exit(1);
+        }
+    };
 
     // file_path.into_string().unwrap()
     (header, row_list)
