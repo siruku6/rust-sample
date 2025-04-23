@@ -14,11 +14,6 @@ mod utilities;
 use utilities::file_readers;
 
 fn main() {
-    // let mut rng = rand::rng(); // デフォルトの乱数生成器を初期化します
-    // let i: i32 = rng.random(); // 整数値の乱数を生成する
-    // let _f: f32 = rng.random(); // 浮動小数点数の乱数を生成する
-    // println!("Random i32: {}", i);
-
     // 対数と指数関数の計算
     let x: f64 = 2.716;
     let y: f64 = x.ln();

@@ -2,6 +2,7 @@ use std::collections::HashMap;
 
 use csv::StringRecord;
 
+#[derive(Debug, Clone)]
 pub struct JobMaster {
     pub job_size: usize,
     pub machine_series_size: usize,
